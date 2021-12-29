@@ -41,7 +41,7 @@ export default class Feed extends Component {
     }
 
     return (
-      <View style={{ backgroundColor: 'teal' }}>
+      <View style={{ backgroundColor: 'teal', flex: 1 }}>
         <SafeAreaView
           style={{
             marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
@@ -69,15 +69,18 @@ export default class Feed extends Component {
             story telling app
           </Text>
         </View>
-
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={story}
-          renderItem={({ item }) => {
-            return <StoryCard story={item} navigation={this.props.navigation}/>;
-          }}
-        />
+        <View style={{flex:0.9}}>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={story}
+            renderItem={({ item }) => {
+              return (
+                <StoryCard story={item} navigation={this.props.navigation} />
+              );
+            }}
+          />
+        </View>
       </View>
-    );
+    )
   }
 }
