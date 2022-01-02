@@ -29,7 +29,7 @@ const BottomTabNavigator = () => {
         position: 'absolute',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        backgroundColor: 'teal',
+        backgroundColor: '#2f345d',
         borderTopWidth:2
       }}>
        <Tab.Screen name="Feed" component={Feed} />
