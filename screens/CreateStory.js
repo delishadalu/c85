@@ -2,40 +2,34 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  Image,
+  FlatList,
   SafeAreaView,
   Platform,
   StatusBar,
-  Image,
   ScrollView,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import StoryCard from './StoryCard';
-import { FlatList } from 'react-native-gesture-handler';
+import AppLoading from 'expo-app-loading';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-var story = require('./temp_stories.json');
-
-var image1 = require('../assets/story_image_1.png');
-var image2 = require('../assets/story_image_2.png');
-var image3 = require('../assets/story_image_3.png');
-var image4 = require('../assets/story_image_4.png');
-var image5 = require('../assets/story_image_5.png');
-
+var images = {
+  image1: require('../assets/story_image_1.png'),
+  image2: require('../assets/story_image_2.png'),
+  image3: require('../assets/story_image_3.png'),
+  image4: require('../assets/story_image_4.png'),
+  image5: require('../assets/story_image_5.png'),
+};
 export default class Feed extends Component {
   constructor() {
     super();
     this.state = {
       fontLoaded: false,
-      title: '',
-      previewImage: image1,
+      previewImage: 'image1',
     };
-  }
-
-  componentDidMount() {
-    this.loadFont();
   }
 
   loadFont = async () => {
@@ -46,79 +40,82 @@ export default class Feed extends Component {
     this.setState({ fontLoaded: true });
   };
 
+  componentDidMount() {
+    this.loadFont();
+  }
+
   render() {
     if (!this.state.fontLoaded) {
       return <AppLoading />;
     }
-
     return (
-      <View style={{ flex: 1, backgroundColor: 'teal' }}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={{
+          flex: 1,
+          backgroundColor: 'teal',
+        }}>
         <SafeAreaView
           style={{
             marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
           }}
         />
-
         <View
           style={{
-            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+            flexDirection: 'row',
           }}>
           <Image
-            style={{ width: 100, height: 100 }}
+            style={{ width: 50, height: 50 }}
             source={require('../assets/logo.png')}
           />
 
-          <Text
-            style={{
-              padding: 20,
-              fontFamily: 'bubblegum-sans',
-              fontSize: RFValue(20),
-            }}>
-            story telling app
+          <Text style={{ paddingLeft: 20, fontFamily: 'bubblegum-sans' }}>
+            STORY TELLING APP
           </Text>
         </View>
+
         <View style={{ flex: 0.9, marginTop: 10 }}>
           <ScrollView>
             <Image
               style={{ width: '100%', height: 200, resizeMode: 'contain' }}
-              source={this.state.previewImage}
+              source={images[this.state.previewImage]}
             />
 
             <DropDownPicker
               items={[
-                { label: 'image1', value: image1 },
-                { label: 'image2', value: image2 },
-                { label: 'image3', value: image3 },
-                { label: 'image4', value: image4 },
-                { label: 'image5', value: image5 },
+                { label: 'image1', value: 'image1' },
+                { label: 'image2', value: 'image2' },
+                { label: 'image3', value: 'image3' },
+                { label: 'image4', value: 'image4' },
+                { label: 'image5', value: 'image5' },
               ]}
-              itemStyle={{
-                justifyContent: 'flex-start',
-                paddingleft:20
-              }}
-              containerStyle={{
-                height: 40,
-                borderRadius: 10,
-                borderWidth: 2,
-              }}
+              style={{ backgroundColor: 'transparent' }}
               dropDownStyle={{
-                marginTop: 40,
                 backgroundColor: 'skyblue',
                 borderWidth: 2,
+                marginTop: 25,
               }}
-              labelStyle={{ color: 'white', fontFamily: 'bubbleGum-sans' }}
-              style={{ backgroundColor: "transparent" }}
               onChangeItem={(item) =>
                 this.setState({ previewImage: item.value })
               }
+              labelStyle={{ color: 'white', fontFamily: 'bubblegum-sans' }}
+              itemStyle={{ justifyContent: 'flex-start', paddingLeft: 20 }}
+              containerStyle={{
+                height: 30,
+                borderRadius: 20,
+                borderWidth: 2,
+                borderColor: 'white',
+              }}
             />
 
             <TextInput
               placeholder="title"
               placeholderTextColor="white"
-              onChangeText={(title) => this.setState({ title })}
+              onChangeText={(title) => {
+                this.setState({ title });
+              }}
               style={{
                 borderWidth: 2,
                 borderRadius: 10,
@@ -130,12 +127,13 @@ export default class Feed extends Component {
                 color: 'white',
               }}
             />
+
             <TextInput
-              multiline={true}
-              numberOfLines={4}
               placeholder="description"
               placeholderTextColor="white"
-              onChangeText={(description) => this.setState({ description })}
+              onChangeText={(description) => {
+                this.setState({ description });
+              }}
               style={{
                 borderWidth: 2,
                 borderRadius: 10,
@@ -147,12 +145,15 @@ export default class Feed extends Component {
                 color: 'white',
               }}
             />
+
             <TextInput
-              multiline={true}
-              numberOfLines={20}
               placeholder="story"
               placeholderTextColor="white"
-              onChangeText={(story) => this.setState({ story })}
+              onChangeText={(story) => {
+                this.setState({ story });
+              }}
+              multiline={true}
+              numberOfLines={20}
               style={{
                 borderWidth: 2,
                 borderRadius: 10,
@@ -168,7 +169,9 @@ export default class Feed extends Component {
             <TextInput
               placeholder="moral of the story"
               placeholderTextColor="white"
-              onChangeText={(moral) => this.setState({ moral })}
+              onChangeText={(moral) => {
+                this.setState({ moral });
+              }}
               style={{
                 borderWidth: 2,
                 borderRadius: 10,
@@ -182,7 +185,8 @@ export default class Feed extends Component {
             />
           </ScrollView>
         </View>
-      </View>
+      
+      </KeyboardAvoidingView>
     );
   }
 }

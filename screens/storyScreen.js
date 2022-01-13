@@ -15,21 +15,20 @@ import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import * as Speech from 'expo-speech';
 
-let customFonts = {
-  'Bubblegum-Sans': require('../assets/fonts/BubblegumSans-Regular.ttf'),
-};
-
+console.log(this.props);
 export default class StoryCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fontsLoaded: false,
-      speakerColor: 'gray',
+      speakerColor: 'red',
     };
   }
 
   async _loadFontsAsync() {
-    await Font.loadAsync(customFonts);
+    await Font.loadAsync({
+      'Bubblegum-Sans': require('../assets/fonts/BubblegumSans-Regular.ttf'),
+    });
     this.setState({ fontsLoaded: true });
   }
 
@@ -38,62 +37,57 @@ export default class StoryCard extends Component {
   }
 
   initiateSpeak = () => {
-    this.state.speakerColor === 'gray'
-      ? this.setState({ speakerColor: 'red' })
-      : this.setState({ speakerColor: 'gray' });
-
     if (this.state.speakerColor === 'red') {
-      Speech.stop();
-    } else {
       Speech.speak(
         `${this.props.route.params.story.title} by ${this.props.route.params.story.author}`
       );
-
       Speech.speak(this.props.route.params.story.story);
-
       Speech.speak(
-        `moral of the story is ${this.props.route.params.story.author }`
+        `moralof the story is ${this.props.route.params.story.moral}`
       );
+
+      this.setState({ speakerColor: 'gray' });
+    } else {
+      Speech.stop();
+      this.setState({ speakerColor: 'red' });
     }
   };
+
   render() {
     if (!this.state.fontsLoaded) {
       return <AppLoading />;
     } else {
-      console.log(this.props.route);
       return (
-        <View style={styles.container}>
-          <View style={styles.cardContainer}>
-            <Image
-              source={require('../assets/story_image_1.png')}
-              style={styles.storyImage}></Image>
+        <View style={styles.cardContainer}>
+          <Image
+            source={require('../assets/story_image_1.png')}
+            style={styles.storyImage}></Image>
 
-            <View style={styles.titleContainer}>
-              <Text style={styles.storyTitleText}>
-                {this.props.route.params.story.title}
-              </Text>
-              <Text style={styles.storyAuthorText}>
-                {this.props.route.params.story.author}
-              </Text>
-              <Text style={styles.descriptionText}>
-                {this.props.route.params.story.story}
-              </Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.storyTitleText}>
+              {this.props.route.params.story.title}
+            </Text>
+            <View style={{ position: 'absolute', right: 20, top: -5 }}>
+              <TouchableOpacity onPress={this.initiateSpeak}>
+                <Ionicons
+                  name={'volume-high'}
+                  size={RFValue(30)}
+                  color={this.state.speakerColor}
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={this.initiateSpeak}>
-              <View style={styles.actionContainer}>
-                <View
-                  style={[
-                    styles.likeButton,
-                    { backgroundColor: this.state.speakerColor },
-                  ]}>
-                  <Ionicons
-                    name={'volume-high-outline'}
-                    size={RFValue(30)}
-                    color={'white'}
-                  />
-                </View>
-              </View>
-            </TouchableOpacity>
+            <Text style={styles.storyAuthorText}>
+              {this.props.route.params.story.author}
+            </Text>
+            <Text style={styles.descriptionText}>
+              {this.props.route.params.story.story}
+            </Text>
+          </View>
+          <View style={styles.actionContainer}>
+            <View style={styles.likeButton}>
+              <Ionicons name={'heart'} size={RFValue(30)} color={'white'} />
+              <Text style={styles.likeText}>12k</Text>
+            </View>
           </View>
         </View>
       );

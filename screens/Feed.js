@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  Image,
+  FlatList,
   SafeAreaView,
   Platform,
   StatusBar,
-  Image,
 } from 'react-native';
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import StoryCard from './StoryCard';
-import { FlatList } from 'react-native-gesture-handler';
-
-var story = require('./temp_stories.json');
+import AppLoading from 'expo-app-loading';
+var stories = require('./temp_stories.json');
 
 export default class Feed extends Component {
   constructor() {
@@ -21,10 +19,6 @@ export default class Feed extends Component {
     this.state = {
       fontLoaded: false,
     };
-  }
-
-  componentDidMount() {
-    this.loadFont();
   }
 
   loadFont = async () => {
@@ -35,52 +29,51 @@ export default class Feed extends Component {
     this.setState({ fontLoaded: true });
   };
 
+  componentDidMount() {
+    this.loadFont();
+  }
+
   render() {
     if (!this.state.fontLoaded) {
       return <AppLoading />;
     }
-
     return (
-      <View style={{ backgroundColor: 'teal', flex: 1 }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          backgroundColor: 'teal',
+        }}>
         <SafeAreaView
           style={{
             marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
           }}
         />
-
         <View
           style={{
-            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+            flexDirection: 'row',
           }}>
           <Image
-            style={{ width: 100, height: 100 }}
+            style={{ width: 50, height: 50 }}
             source={require('../assets/logo.png')}
           />
-
-          <Text
-            style={{
-              padding: 20,
-              fontFamily: 'bubblegum-sans',
-              fontSize: RFValue(20),
-            }}>
-            {' '}
-            story telling app
+          <Text style={{ paddingLeft: 20, fontFamily: 'bubblegum-sans' }}>
+            STORY TELLING APP
           </Text>
         </View>
-        <View style={{flex:0.9}}>
+
+        <View style={{ flex: 0.9 }}>
           <FlatList
             keyExtractor={(item, index) => index.toString()}
-            data={story}
+            data={stories}
             renderItem={({ item }) => {
-              return (
-                <StoryCard story={item} navigation={this.props.navigation} />
-              );
+              return <StoryCard story={item} navigation={this.props.navigation} />;
             }}
           />
         </View>
       </View>
-    )
+    );
   }
 }
