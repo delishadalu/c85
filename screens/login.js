@@ -119,24 +119,7 @@ export default class Profile extends Component {
     }
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.iconImage}
-          source={require('../assets/logo.png')}
-        />
-        <Text style={styles.text}>story telling app</Text>
-        <TouchableOpacity onPress={this.signInWithGoogleAsync}>
-          <View style={styles.loginBox}>
-            <Image
-              style={styles.loginIcon}
-              source={require('../assets/google_icon.png')}
-            />
-            <Text style={styles.loginText}> sigin with google</Text>
-          </View>
-        </TouchableOpacity>
-        <Image
-          style={styles.bottomImage}
-          source={require('../assets/cloud.png')}
-        />
+       <Text>login screen</Text>
       </View>
     );
   }
