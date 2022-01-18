@@ -152,3 +152,5 @@ const styles = StyleSheet.create({
     bottom: RFValue(-5),
   },
 });
+
+//C:\Program Files\Git\usr\bin
